@@ -88,9 +88,11 @@ public class PetData {
 	        }
 	    }
 	 
-	 public List<Pet> search(int petId) {
+	 public List<Pet> search(int petId) 
+	 {
 		 List<Pet> pets = new ArrayList<>();
-		 try(Connection connection = JDBCConnection.getConnection()){
+		 try(Connection connection = JDBCConnection.getConnection())
+		 {
 			 String query = "SELECT * FROM pet_store_system  WHERE pet_id = ?";
 			 PreparedStatement statement = connection.prepareStatement(query);
 			 statement.setInt(1, petId);
@@ -115,6 +117,66 @@ public class PetData {
 			 e.printStackTrace();
 		 }
 		 return pets;
+	 }
+	 public List<Pet> searchByPrice(int lower, int higher) {
+		 List<Pet> pets = new ArrayList<>();
+		 try(Connection connection = JDBCConnection.getConnection()){
+			 String query = "SELECT * FROM pet_store_system  WHERE pet_retail_price >= ? AND pet_retail_price <= ?";
+			 PreparedStatement statement = connection.prepareStatement(query);
+			 statement.setInt(1, lower);
+			 statement.setInt(2, higher);
+			 ResultSet resultSet = statement.executeQuery();
+
+	            while (resultSet.next()) {
+	            	Pet pet = new Pet();
+
+	                pet.setPetId(resultSet.getInt("pet_id"));
+	                pet.setPetCat(resultSet.getString("pet_category"));
+	                pet.setPetType(resultSet.getString("pet_type"));
+	                pet.setPetColor(resultSet.getString("pet_color"));
+	                pet.setPetAge(resultSet.getInt("pet_age"));
+	                pet.setPetPrice(resultSet.getDouble("pet_retail_price"));
+	                pet.setPetVac(resultSet.getBoolean("pet_vaccination"));
+	                pet.setPetFh(resultSet.getString("pet_food_habit"));
+	                
+	                pets.add(pet);
+	            }
+			 
+		 }
+		 catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+		 return pets;
+	 }
+	 
+	 public int countPetsByCategory(String str) {
+		 List<Pet> pets = new ArrayList<>();
+		 try(Connection connection = JDBCConnection.getConnection()){
+			 String query = "SELECT * FROM pet_store_system  WHERE pet_category= ?";
+			 PreparedStatement statement = connection.prepareStatement(query);
+			 statement.setString(1, str);
+			 ResultSet resultSet = statement.executeQuery();
+
+	            while (resultSet.next()) {
+	            	Pet pet = new Pet();
+
+	                pet.setPetId(resultSet.getInt("pet_id"));
+	                pet.setPetCat(resultSet.getString("pet_category"));
+	                pet.setPetType(resultSet.getString("pet_type"));
+	                pet.setPetColor(resultSet.getString("pet_color"));
+	                pet.setPetAge(resultSet.getInt("pet_age"));
+	                pet.setPetPrice(resultSet.getDouble("pet_retail_price"));
+	                pet.setPetVac(resultSet.getBoolean("pet_vaccination"));
+	                pet.setPetFh(resultSet.getString("pet_food_habit"));
+	                
+	                pets.add(pet);
+	            }
+			 
+		 }
+		 catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+		 return pets.size();
 	 }
 
   

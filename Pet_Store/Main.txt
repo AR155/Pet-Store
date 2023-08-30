@@ -1,5 +1,4 @@
-
-package com.amdocs;
+package pet.amdocs;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,10 +9,10 @@ import java.util.Scanner;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		
-		System.out.println(JDBCConnection.getConnection());
+//		System.out.println(JDBCConnection.getConnection());
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		Scanner sc= new Scanner(System.in);
-		petData pd = new petData();
+		PetData pd = new PetData();
 		Pet pet = new Pet();
 		Boolean f= true;
 		while(f) {
@@ -22,7 +21,9 @@ public class Main {
 			System.out.println("3. Update a Pet");
 			System.out.println("4. Delete a Pet");
 			System.out.println("5. Search a Pet By Id");
-			System.out.println("6. Exit");
+			System.out.println("6. Search by price");
+			System.out.println("7. Search pet by category");
+			System.out.println("8. Exit");
 			
 			int choice = sc.nextInt();
 			sc.nextLine();
@@ -31,7 +32,7 @@ public class Main {
 				
 //				System.out.print("Enter Pet ID: ");
 //				pet.setPetId(sc.nextInt());		
-				
+//				
 			    System.out.print("Enter Pet Category: ");
 			    pet.setPetCat(br.readLine());
 			    
@@ -58,9 +59,16 @@ public class Main {
 			case 2:
 
 				List<Pet> allPets = pd.getAllPets();
+				
+				System.out.println("PetId   PetCategory   PetType   PetColor   PetAge   PetPrice   PetVaccination   PetFood Habit");
+				
+				
 
 				for (Pet pets : allPets) {
-				    System.out.println("Pet ID: " + pets.getPetId());
+					
+					System.out.println(pets.getPetId()+"         "+  pets.getPetCat()+"         " +pets.getPetType()+"     "+pets.getPetColor()+"      "+pets.getPetAge()+"       "+pets.getPetPrice()+"        "+pets.getPetVac()+"         "+pets.getPetFh());
+					
+				   /* System.out.println("Pet ID: " + pets.getPetId());
 				    System.out.println("Pet Category: " + pets.getPetCat());
 				    System.out.println("Pet Type: " + pets.getPetType());
 				    System.out.println("Pet Color: " + pets.getPetColor());
@@ -69,7 +77,7 @@ public class Main {
 				    System.out.println("Pet Vaccination: " + pets.getPetVac());
 				    System.out.println("Pet Food Habit: " + pets.getPetFh());
 				   
-				    System.out.println("--------------------------");
+				    System.out.println("--------------------------");*/
 				}
 				break;
 			case 3:
@@ -123,7 +131,43 @@ public class Main {
 				    System.out.println("--------------------------");
 				}
 				break;
+				
 			case 6:
+				int upper, lower;
+				System.out.println("Enter Pet price range which you want to search: ");
+				System.out.print("Enter Min price: ");
+				lower=sc.nextInt();
+				System.out.print("Enter Max price: ");
+				upper=sc.nextInt();
+				List<Pet> petDet2 = pd.searchByPrice(lower, upper);
+				
+				if(petDet2.size()==0) {
+					System.out.println("No Pet Found in this range");
+					System.out.println("--------------------------");
+				}
+				else {
+					for (Pet pets : petDet2) {
+					    System.out.println("Pet ID: " + pets.getPetId());
+					    System.out.println("Pet Category: " + pets.getPetCat());
+					    System.out.println("Pet Type: " + pets.getPetType());
+					    System.out.println("Pet Color: " + pets.getPetColor());
+					    System.out.println("Pet Age: " + pets.getPetAge());
+					    System.out.println("Pet Price: " + pets.getPetPrice());
+					    System.out.println("Pet Vaccination: " + pets.getPetVac());
+					    System.out.println("Pet Foor Habit: " + pets.getPetFh());
+					   
+					    System.out.println("--------------------------");
+					}
+				}
+				break;
+				
+			case 7:
+				System.out.print("Enter Pet category: ");
+				int count=pd.countPetsByCategory(sc.nextLine());
+				System.out.println("Count is: "+ count);
+				break;
+			case 8:
+				System.out.print("Exiting Pet Store ");
 				f=false;
 				break;
 			    
@@ -134,3 +178,4 @@ public class Main {
 		sc.close();
 	}
 }
+
